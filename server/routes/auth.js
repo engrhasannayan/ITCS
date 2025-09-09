@@ -11,15 +11,14 @@ import {
 
 export const authRouter = Router();
 
-/* ───────── Preferred endpoints ───────── */
+/* Preferred */
 authRouter.post('/auth/register', register);
 authRouter.post('/auth/login',    login);
 authRouter.post('/auth/refresh',  refresh);
 authRouter.post('/auth/logout',   logout);
 authRouter.get('/auth/me',        requireAuth, me);
 
-/* ───────── Aliases for older/front-end calls ─────────
-   These make the API tolerant if the client calls /api/register, etc. */
+/* Aliases */
 authRouter.post('/register', register);
 authRouter.post('/login',    login);
 authRouter.post('/refresh',  refresh);
