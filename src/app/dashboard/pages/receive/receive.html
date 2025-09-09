@@ -1,0 +1,74 @@
+<div class="form-container">
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="settings-form">
+    <div class="settings-grid">
+      <div class="field">
+        <label for="inventoryId">Inventory ID</label>
+        <input id="inventoryId" type="text" formControlName="inventoryId" placeholder="e.g., 456001"
+               class="settings-input" [class.is-invalid]="f.inventoryId.touched && f.inventoryId.invalid" />
+        <p class="error" *ngIf="f.inventoryId.touched && f.inventoryId.invalid">Inventory ID is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="item">Item</label>
+        <select id="item" formControlName="item" class="settings-input"
+                [class.is-invalid]="f.item.touched && f.item.invalid">
+          <option value="" disabled>Select item</option>
+          <option *ngFor="let opt of itemOptions" [value]="opt">{{ opt }}</option>
+        </select>
+        <p class="error" *ngIf="f.item.touched && f.item.invalid">Item is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="sentBy">Sent by</label>
+        <select id="sentBy" formControlName="sentBy" class="settings-input"
+                [class.is-invalid]="f.sentBy.touched && f.sentBy.invalid">
+          <option value="" disabled>Select department</option>
+          <option *ngFor="let opt of sentByOptions" [value]="opt">{{ opt }}</option>
+        </select>
+        <p class="error" *ngIf="f.sentBy.touched && f.sentBy.invalid">Department is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="complain">Complain</label>
+        <select id="complain" formControlName="complain" class="settings-input"
+                [class.is-invalid]="f.complain.touched && f.complain.invalid">
+          <option value="" disabled>Select complain</option>
+          <option *ngFor="let opt of complainOptions" [value]="opt">{{ opt }}</option>
+        </select>
+        <p class="error" *ngIf="f.complain.touched && f.complain.invalid">Complain is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="receiveDate">Receive Date</label>
+        <input id="receiveDate" type="date" formControlName="receiveDate"
+               class="settings-input" [class.is-invalid]="f.receiveDate.touched && f.receiveDate.invalid" />
+        <p class="error" *ngIf="f.receiveDate.touched && f.receiveDate.invalid">Receive date is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="receivedBy">Received by</label>
+        <input id="receivedBy" type="text" formControlName="receivedBy" placeholder="e.g., sayedur.rahman"
+               class="settings-input" [class.is-invalid]="f.receivedBy.touched && f.receivedBy.invalid" />
+        <p class="error" *ngIf="f.receivedBy.touched && f.receivedBy.invalid">Receiver name is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="itReport">IT Report</label>
+        <input id="itReport" type="text" formControlName="itReport" placeholder="e.g., Pending"
+               class="settings-input" [class.is-invalid]="f.itReport.touched && f.itReport.invalid" />
+        <p class="error" *ngIf="f.itReport.touched && f.itReport.invalid">IT Report is required.</p>
+      </div>
+
+      <div class="field">
+        <label for="deliveredBy">Delivered by</label>
+        <input id="deliveredBy" type="text" formControlName="deliveredBy" placeholder="-"
+               class="settings-input" />
+        <small class="help">Optional. Fill when item is delivered.</small>
+      </div>
+    </div>
+
+    <div class="settings-actions">
+      <button type="submit" class="btn-primary">Update</button>
+    </div>
+  </form>
+</div>

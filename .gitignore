@@ -1,0 +1,22 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Angular build
+dist/
+.angular/
+
+# Editor/OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Env & secrets
+.env
+server/.env
+
+# Logs
+*.log
+logs/

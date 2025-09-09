@@ -1,0 +1,31 @@
+.soon-wrap {
+  max-width: 1000px;      /* same width as Receive page container */
+  margin: 0 auto;         /* center horizontally */
+  padding: 30px 20px;     /* breathing space */
+}
+
+.soon-card {
+  background: #ffffff;
+  border: 1px solid #e6eaf0;
+  border-radius: 12px;
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: 0 8px 28px rgba(2,12,27,.06);
+}
+
+.soon-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.soon-card h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.soon-card p {
+  margin: 0;
+  color: #64748b;
+}

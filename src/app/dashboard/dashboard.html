@@ -1,0 +1,40 @@
+<div class="dashboard">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="assets/itcs-logo.png" alt="ITCS" class="brand-logo" />
+      <div class="brand-name">ITCS</div>
+    </div>
+
+    <nav class="menu">
+      <a routerLink="/dashboard/home"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }">
+        <span class="mi">🏠</span> Dashboard
+      </a>
+      <a routerLink="/dashboard/receive" routerLinkActive="active">
+        <span class="mi">📥</span> Receive New Item
+      </a>
+      <a routerLink="/dashboard/assign" routerLinkActive="active">
+        <span class="mi">👷</span> Assign Engineer
+      </a>
+      <a routerLink="/dashboard/diagnostic" routerLinkActive="active">
+        <span class="mi">🧪</span> Diagnostic Report
+      </a>
+      <a routerLink="/dashboard/deliver" routerLinkActive="active">
+        <span class="mi">📤</span> Deliver Item
+      </a>
+    </nav>
+
+    <div class="logout">
+      <button (click)="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main content: now only child routes -->
+  <main class="main">
+    <section class="content-wrap">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>
