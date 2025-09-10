@@ -1,9 +1,20 @@
 // server/models/Ticket.js
 import mongoose from 'mongoose';
 
+const customerSchema = new mongoose.Schema(
+  {
+    name: { type: String, trim: true },
+    department: { type: String, trim: true },
+    phone: { type: String, trim: true },
+    email: { type: String, trim: true },
+  },
+  { _id: false }
+);
+
 const deviceSchema = new mongoose.Schema(
   {
     type: { type: String, enum: ['PC', 'Laptop', 'Printer', 'Other'], required: true },
+    inventoryId: { type: String, required: true, trim: true, index: true, unique: true }, // NEW required + unique
     brand: String,
     model: String,
     serial: String,
@@ -15,8 +26,8 @@ const deviceSchema = new mongoose.Schema(
 const historySchema = new mongoose.Schema(
   {
     at: { type: Date, default: Date.now },
-    by: String,           // optional: user name/id
-    action: String,       // e.g., 'received', 'assigned', 'diagnosing', ...
+    by: String,
+    action: String,
     notes: String,
   },
   { _id: false }
@@ -24,26 +35,23 @@ const historySchema = new mongoose.Schema(
 
 const ticketSchema = new mongoose.Schema(
   {
-    ticketNo: { type: String, unique: true, index: true }, // ITCS-YYYY-000001
-    department: { type: String, required: true },
-    ownerName: { type: String, required: true },
-    contactPhone: String,
-    device: { type: deviceSchema, required: true },
-    problemSummary: { type: String, required: true },
-
+    ticketNo: { type: String, required: true, unique: true, index: true },
     status: {
       type: String,
-      enum: ['received', 'assigned', 'diagnosing', 'approved', 'in_service', 'ready', 'delivered', 'closed'],
+      enum: ['received','assigned','diagnosing','approved','in_service','ready','delivered','closed'],
       default: 'received',
       index: true,
     },
-
+    problemSummary: { type: String, trim: true },
+    customer: customerSchema,
+    device: deviceSchema,
+    receivedAt: { type: Date, default: Date.now, index: true },
     receivedBy: String,
-    receivedAt: { type: Date, default: Date.now },
-
-    history: { type: [historySchema], default: [] },
+    history: [historySchema],
   },
   { timestamps: true }
 );
+
+ticketSchema.index({ status: 1, receivedAt: -1 });
 
 export const Ticket = mongoose.model('Ticket', ticketSchema);

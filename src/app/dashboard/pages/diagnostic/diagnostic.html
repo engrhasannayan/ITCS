@@ -1,7 +1,73 @@
-<div class="soon-wrap">
-  <div class="soon-card">
-    <div class="soon-icon">🧪</div>
-    <h2>Diagnostic Report</h2>
-    <p>This section is coming soon.</p>
+<div class="container">
+  <h1 class="title">Diagnostic</h1>
+
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="createDiagnostic()">
+      <div class="row">
+        <label>Ticket ID <span class="req">*</span></label>
+        <input formControlName="ticketId" placeholder="Mongo _id or ITCS-2025-0001" />
+      </div>
+
+      <div class="row">
+        <label>Findings <span class="req">*</span></label>
+        <textarea formControlName="findings" rows="4" placeholder="Describe the diagnosis..."></textarea>
+      </div>
+
+      <div class="row">
+        <label>Parts Needed</label>
+        <input formControlName="partsNeeded" placeholder="Comma-separated (e.g., SSD 512GB, Thermal Paste)" />
+      </div>
+
+      <div class="row two">
+        <div>
+          <label>Estimated Cost</label>
+          <input type="number" formControlName="estimatedCost" placeholder="e.g., 5000" />
+        </div>
+        <div>
+          <label>Estimated Time</label>
+          <input formControlName="estimatedTime" placeholder="e.g., 2 days" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" [disabled]="loading()">Create Diagnostic</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="alerts" *ngIf="message() || error()">
+    <p class="ok" *ngIf="message()">{{ message() }}</p>
+    <p class="bad" *ngIf="error()">{{ error() }}</p>
+  </div>
+
+  <div class="card" *ngIf="report() as r">
+    <h2>Latest Diagnostic</h2>
+    <dl>
+      <dt>ID</dt><dd>{{ r._id }}</dd>
+      <dt>Ticket</dt><dd>{{ r.ticketId }}</dd>
+      <dt>Status</dt><dd>{{ r.status }}</dd>
+      <dt>Findings</dt><dd>{{ r.findings }}</dd>
+      <dt>Parts</dt><dd>{{ r.partsNeeded?.join(', ') || '—' }}</dd>
+      <dt>Estimated</dt><dd>{{ r.estimatedCost || '—' }} / {{ r.estimatedTime || '—' }}</dd>
+    </dl>
+    <div class="actions">
+      <button type="button" (click)="decision('approve')" [disabled]="loading()">Approve</button>
+      <button type="button" (click)="decision('reject')"  [disabled]="loading()">Reject</button>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="(reports().length || 0) > 0">
+    <h2>Existing Diagnostics</h2>
+    <table class="table">
+      <thead><tr><th>ID</th><th>Status</th><th>Findings</th><th>Prepared</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let d of reports()">
+          <td>{{ d._id }}</td>
+          <td>{{ d.status }}</td>
+          <td>{{ d.findings }}</td>
+          <td>{{ d.preparedAt | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

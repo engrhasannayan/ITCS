@@ -57,3 +57,19 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+## Milestone 2 — Diagnostics (How to test)
+
+### Backend
+- Endpoints:
+  - `POST /api/diagnose` — create a diagnostic for a ticket (sets ticket to `diagnosing`).
+  - `POST /api/diagnose/:id/decision` — approve/reject (sets ticket to `approved` or `received`).
+  - `GET /api/diagnose?ticketId=...` — list diagnostics by ticket.
+
+### Frontend
+- Navigate to **Dashboard → Diagnose**
+- Enter a valid **Ticket ID** (from Mongo) and **Findings**; optional parts, estimated cost/time.
+- Create diagnostic, then **Approve/Reject**.
+- Existing diagnostics for the entered Ticket ID will auto-load in the table.
+
