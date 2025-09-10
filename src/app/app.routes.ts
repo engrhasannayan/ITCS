@@ -8,48 +8,34 @@ import { signedOutGuard } from './guards/signed-out.guard';
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'sign-in' },
 
-  // Public routes
+  // Public
   { path: 'sign-in', component: SigninComponent, canActivate: [signedOutGuard], title: 'ITCS – Sign In' },
   { path: 'register', component: RegistrationComponent, title: 'ITCS – Register' },
 
-  // Protected dashboard and its children
+  // Protected
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard],
-    title: 'ITCS – Dashboard',
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'home' },
+      { path: '', pathMatch: 'full', redirectTo: 'receive' },
 
-      // Home (already exists)
-      {
-        path: 'home',
-        loadComponent: () => import('./dashboard/pages/home/home').then(m => m.HomePage),
-        title: 'ITCS – Dashboard',
-      },
-
-      // Receive New Item (already exists)
       {
         path: 'receive',
         loadComponent: () => import('./dashboard/pages/receive/receive').then(m => m.ReceivePage),
-        title: 'ITCS – Receive New Item',
+        title: 'ITCS – Receive Item',
       },
-
-      // NEW: Assign Engineer
       {
         path: 'assign',
         loadComponent: () => import('./dashboard/pages/assign/assign').then(m => m.AssignPage),
-        title: 'ITCS – Assign Engineer',
+        title: 'ITCS – Assign',
       },
-
-      // NEW: Diagnostic Report
+      // ✅ Route name = 'diagnostic'
       {
         path: 'diagnostic',
         loadComponent: () => import('./dashboard/pages/diagnostic/diagnostic').then(m => m.DiagnosticPage),
-        title: 'ITCS – Diagnostic Report',
+        title: 'ITCS – Diagnostic',
       },
-
-      // NEW: Deliver Item
       {
         path: 'deliver',
         loadComponent: () => import('./dashboard/pages/deliver/deliver').then(m => m.DeliverPage),

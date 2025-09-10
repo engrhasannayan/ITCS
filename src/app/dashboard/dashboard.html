@@ -1,39 +1,31 @@
-<div class="dashboard">
-  <!-- Sidebar -->
+<div class="layout">
   <aside class="sidebar">
-    <div class="sidebar-header">
-      <img src="assets/itcs-logo.png" alt="ITCS" class="brand-logo" />
-      <div class="brand-name">ITCS</div>
-    </div>
-
-    <nav class="menu">
-      <a routerLink="/dashboard/home"
-         routerLinkActive="active"
-         [routerLinkActiveOptions]="{ exact: true }">
-        <span class="mi">🏠</span> Dashboard
-      </a>
-      <a routerLink="/dashboard/receive" routerLinkActive="active">
-        <span class="mi">📥</span> Receive New Item
-      </a>
-      <a routerLink="/dashboard/assign" routerLinkActive="active">
-        <span class="mi">👷</span> Assign Engineer
-      </a>
-      <a routerLink="/dashboard/diagnostic" routerLinkActive="active">
-        <span class="mi">🧪</span> Diagnostic Report
-      </a>
-      <a routerLink="/dashboard/deliver" routerLinkActive="active">
-        <span class="mi">📤</span> Deliver Item
-      </a>
+    <h3 class="brand">ITCS</h3>
+    <nav>
+      <ul>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="receive">Receive</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="assign">Assign</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="diagnostic">Diagnostic</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="deliver">Deliver</a>
+        </li>
+      </ul>
     </nav>
-
-    <div class="logout">
-      <button (click)="logout()">Logout</button>
-    </div>
   </aside>
 
-  <!-- Main content: now only child routes -->
-  <main class="main">
-    <section class="content-wrap">
+  <main class="content">
+    <header class="topbar">
+      <div class="spacer"></div>
+      <button class="logout" (click)="logout()">Logout</button>
+    </header>
+
+    <section class="page">
       <router-outlet></router-outlet>
     </section>
   </main>

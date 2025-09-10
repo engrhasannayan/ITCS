@@ -1,16 +1,21 @@
-.soon-wrap {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 30px 20px;
-}
-.soon-card {
-  background: #ffffff;
-  border: 1px solid #e6eaf0;
-  border-radius: 12px;
-  padding: 40px 24px;
-  text-align: center;
-  box-shadow: 0 8px 28px rgba(2,12,27,.06);
-}
-.soon-icon { font-size: 40px; margin-bottom: 8px; }
-.soon-card h2 { margin: 0 0 6px; font-size: 20px; font-weight: 800; color: #0f172a; }
-.soon-card p { margin: 0; color: #64748b; }
+.container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+.title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+.row { display: flex; flex-direction: column; gap: 0.4rem; margin: 0.6rem 0; }
+.row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { font-weight: 600; }
+.req { color: #ef4444; }
+input, textarea, select { border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.6rem 0.7rem; outline: none; }
+input:focus, textarea:focus, select:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+.actions { display: flex; gap: 0.6rem; margin-top: 1rem; }
+button { border: none; border-radius: 10px; padding: 0.6rem 1rem; cursor: pointer; background: #4f46e5; color: white; font-weight: 600; }
+button[disabled] { opacity: 0.6; cursor: not-allowed; }
+.alerts .ok { color: #065f46; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 0.5rem 0.75rem; border-radius: 8px; }
+.alerts .bad { color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; padding: 0.5rem 0.75rem; border-radius: 8px; }
+dl { display: grid; grid-template-columns: 160px 1fr; gap: 0.3rem 1rem; }
+dt { font-weight: 700; color: #374151; }
+dd { margin: 0; }
+
+.table { width:100%; border-collapse: collapse; }
+.table th,.table td{ border:1px solid #e5e7eb; padding:8px; text-align:left; }
+.table th{ background:#f8fafc; }

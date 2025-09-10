@@ -22,66 +22,59 @@ export class AuthService {
     return localStorage.getItem(this.key);
   }
 
-  /** Store token and update state */
-  private setToken(token: string) {
-    localStorage.setItem(this.key, token);
-    this._authed$.next(true);
+  /** Save token + update state */
+  private setToken(token: string | null) {
+    if (token) localStorage.setItem(this.key, token);
+    else localStorage.removeItem(this.key);
+    this._authed$.next(!!token);
   }
 
-  /** Clear token and update state */
-  private clearToken() {
-    localStorage.removeItem(this.key);
-    this._authed$.next(false);
-  }
-
-  /** Used by existing guards/templates */
+  /** Is user authenticated (fast check) */
   isAuthenticated(): boolean {
     return !!this.token();
   }
 
-  /** App startup helper (called from main.ts) */
+  /** Login and store token */
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>('/api/auth/login', { email, password }, { withCredentials: true })
+      .pipe(
+        tap(res => this.setToken(res.accessToken))
+      );
+  }
+
+  /**
+   * Try to initialize session from refresh cookie on app startup.
+   * Safe to call unconditionally; it silently fails if no refresh cookie.
+   */
   initFromRefresh(): void {
-    // If we already have a token, consider authed.
-    if (this.token()) {
-      this._authed$.next(true);
-      return;
+    // Only attempt if we don't already have an access token
+    if (!this.token()) {
+      this.refresh().subscribe(() => {
+        // no-op: state is handled inside refresh()
+      });
     }
-    // Try to get a new access token from refresh cookie (if present).
-    this.http
-      .post<{ accessToken: string }>('/api/auth/refresh', {}, { withCredentials: true })
-      .pipe(
-        tap(res => this.setToken(res.accessToken)),
-        catchError(() => {
-          // no cookie / invalid refresh -> stay signed out
-          this.clearToken();
-          return of(null);
-        })
-      )
-      .subscribe();
   }
 
-  /** Sign in and store access token */
-  login(email: string, password: string): Observable<void> {
-    return this.http
-      .post<LoginResponse>('/api/auth/login', { email, password }, { withCredentials: true })
-      .pipe(
-        tap(res => this.setToken(res.accessToken)),
-        map(() => void 0)
-      );
-  }
-
-  /** Try to refresh explicitly (used by interceptor) */
+  /** Refresh (rotate) access token using httpOnly refresh cookie */
   refresh(): Observable<string | null> {
-    return this.http
-      .post<{ accessToken: string }>('/api/auth/refresh', {}, { withCredentials: true })
+    return this.http.post<{ accessToken: string }>('/api/auth/refresh', {}, { withCredentials: true })
       .pipe(
-        tap(res => this.setToken(res.accessToken)),
-        map(res => res.accessToken),
-        catchError(() => {
-          this.clearToken();
-          return of(null);
-        })
+        map(res => res?.accessToken || null),
+        tap(token => this.setToken(token)),
+        catchError(() => of(null))
       );
+  }
+
+  /** Get current user profile (requires valid access token) */
+  me(): Observable<{ user: { id: string; fullName: string; email: string; role: string } }> {
+    return this.http.get<{ user: { id: string; fullName: string; email: string; role: string } }>(
+      '/api/auth/me'
+    );
+  }
+
+  /** Clear token only */
+  private clearToken() {
+    this.setToken(null);
   }
 
   /** Sign out (server + local) */

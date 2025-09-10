@@ -1,74 +1,118 @@
-<div class="form-container">
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="settings-form">
-    <div class="settings-grid">
-      <div class="field">
-        <label for="inventoryId">Inventory ID</label>
-        <input id="inventoryId" type="text" formControlName="inventoryId" placeholder="e.g., 456001"
-               class="settings-input" [class.is-invalid]="f.inventoryId.touched && f.inventoryId.invalid" />
-        <p class="error" *ngIf="f.inventoryId.touched && f.inventoryId.invalid">Inventory ID is required.</p>
+<div class="container">
+  <h1 class="title">Receive Item</h1>
+
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h3>Customer</h3>
+      <div class="row two" formGroupName="customer">
+        <div>
+          <label>Item User</label>
+          <input formControlName="name" placeholder="e.g., John Smith" />
+        </div>
+        <div>
+          <label>Department</label>
+          <select formControlName="department">
+            <option value="">-- Select Department --</option>
+            @for (d of departments; track d) {
+              <option [value]="d">{{ d }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label>Phone</label>
+          <input formControlName="phone" placeholder="+880..." />
+        </div>
+        <div>
+          <label>Email</label>
+          <input formControlName="email" placeholder="john@univ.edu" />
+        </div>
       </div>
 
-      <div class="field">
-        <label for="item">Item</label>
-        <select id="item" formControlName="item" class="settings-input"
-                [class.is-invalid]="f.item.touched && f.item.invalid">
-          <option value="" disabled>Select item</option>
-          <option *ngFor="let opt of itemOptions" [value]="opt">{{ opt }}</option>
-        </select>
-        <p class="error" *ngIf="f.item.touched && f.item.invalid">Item is required.</p>
+      <h3>Device</h3>
+      <div class="row two" formGroupName="device">
+        <div>
+          <label>Item <span class="req">*</span></label>
+          <select formControlName="type">
+            <option>Laptop</option>
+            <option>PC</option>
+            <option>Printer</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label>Inventory ID <span class="req">*</span></label>
+          <input formControlName="inventoryId" placeholder="e.g., INV-2025-00123" />
+        </div>
+        <div>
+          <label>Brand</label>
+          <input formControlName="brand" placeholder="Dell" />
+        </div>
+        <div>
+          <label>Model</label>
+          <input formControlName="model" placeholder="XPS 13" />
+        </div>
+        <div>
+          <label>Serial</label>
+          <input formControlName="serial" placeholder="ABC123..." />
+        </div>
       </div>
 
-      <div class="field">
-        <label for="sentBy">Sent by</label>
-        <select id="sentBy" formControlName="sentBy" class="settings-input"
-                [class.is-invalid]="f.sentBy.touched && f.sentBy.invalid">
-          <option value="" disabled>Select department</option>
-          <option *ngFor="let opt of sentByOptions" [value]="opt">{{ opt }}</option>
-        </select>
-        <p class="error" *ngIf="f.sentBy.touched && f.sentBy.invalid">Department is required.</p>
+      <div class="row" formGroupName="device">
+        <label>Accessories</label>
+        <input formControlName="accessories" placeholder="Bag, charger, mouse" />
       </div>
 
-      <div class="field">
-        <label for="complain">Complain</label>
-        <select id="complain" formControlName="complain" class="settings-input"
-                [class.is-invalid]="f.complain.touched && f.complain.invalid">
-          <option value="" disabled>Select complain</option>
-          <option *ngFor="let opt of complainOptions" [value]="opt">{{ opt }}</option>
-        </select>
-        <p class="error" *ngIf="f.complain.touched && f.complain.invalid">Complain is required.</p>
+      <div class="row">
+        <label>Problem Summary <span class="req">*</span></label>
+        <textarea formControlName="problemSummary" rows="3" placeholder="Brief description..."></textarea>
       </div>
 
-      <div class="field">
-        <label for="receiveDate">Receive Date</label>
-        <input id="receiveDate" type="date" formControlName="receiveDate"
-               class="settings-input" [class.is-invalid]="f.receiveDate.touched && f.receiveDate.invalid" />
-        <p class="error" *ngIf="f.receiveDate.touched && f.receiveDate.invalid">Receive date is required.</p>
+      <div class="actions">
+        <button type="submit" [disabled]="loading()">Receive</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="alerts">
+    @if (message()) { <p class="ok">{{ message() }}</p> }
+    @if (error()) { <p class="bad">{{ error() }}</p> }
+  </div>
+
+  @let t = created();
+  @if (t) {
+    <div class="card">
+      <div #slip class="slip">
+        <div class="hdr">
+          <div class="brand">IT Service Center – Receive Slip</div>
+          <div class="meta">Date: {{ t.receivedAt | date:'short' }}</div>
+        </div>
+
+        <hr />
+
+        <div class="section">
+          <div class="row"><div><b>Ticket No</b></div><div>{{ t.ticketNo }}</div></div>
+          <div class="row"><div><b>Inventory ID</b></div><div>{{ t.device?.inventoryId }}</div></div>
+          <div class="row"><div><b>Item</b></div><div>{{ t.device?.type }} / {{ t.device?.brand }} {{ t.device?.model }}</div></div>
+          @if (t.device?.serial) {
+            <div class="row"><div><b>Serial</b></div><div>{{ t.device?.serial }}</div></div>
+          }
+          <div class="row"><div><b>User</b></div><div>{{ t.customer?.name }} ({{ t.customer?.department || '—' }})</div></div>
+          @if (t.device?.accessories) {
+            <div class="row"><div><b>Accessories</b></div><div>{{ t.device?.accessories }}</div></div>
+          }
+          <div class="row"><div><b>Problem</b></div><div>{{ t.problemSummary }}</div></div>
+        </div>
+
+        <div class="barcode">
+          <app-barcode [value]="t.ticketNo" [format]="'CODE128'" [width]="2" [height]="60" [displayValue]="true"></app-barcode>
+        </div>
+
+        <p class="muted">Please keep this slip to collect your item. Present the Ticket No at the counter.</p>
       </div>
 
-      <div class="field">
-        <label for="receivedBy">Received by</label>
-        <input id="receivedBy" type="text" formControlName="receivedBy" placeholder="e.g., sayedur.rahman"
-               class="settings-input" [class.is-invalid]="f.receivedBy.touched && f.receivedBy.invalid" />
-        <p class="error" *ngIf="f.receivedBy.touched && f.receivedBy.invalid">Receiver name is required.</p>
-      </div>
-
-      <div class="field">
-        <label for="itReport">IT Report</label>
-        <input id="itReport" type="text" formControlName="itReport" placeholder="e.g., Pending"
-               class="settings-input" [class.is-invalid]="f.itReport.touched && f.itReport.invalid" />
-        <p class="error" *ngIf="f.itReport.touched && f.itReport.invalid">IT Report is required.</p>
-      </div>
-
-      <div class="field">
-        <label for="deliveredBy">Delivered by</label>
-        <input id="deliveredBy" type="text" formControlName="deliveredBy" placeholder="-"
-               class="settings-input" />
-        <small class="help">Optional. Fill when item is delivered.</small>
+      <div class="actions" style="margin-top:10px;">
+        <button type="button" class="print" (click)="printSlip()">Print Slip</button>
       </div>
     </div>
-
-    <div class="settings-actions">
-      <button type="submit" class="btn-primary">Update</button>
-    </div>
-  </form>
+  }
 </div>
